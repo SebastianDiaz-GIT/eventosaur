@@ -1,0 +1,72 @@
+services:
+  kafka1:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka1
+    environment:
+      KAFKA_PROCESS_ROLES: controller,broker
+      KAFKA_NODE_ID: 1
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:9093,2@kafka2:9093,3@kafka3:9093"
+      KAFKA_LISTENERS: PLAINTEXT://kafka1:9092,EXTERNAL://0.0.0.0:19092,CONTROLLER://kafka1:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092,EXTERNAL://localhost:19092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CLUSTER_ID: "cluster-1"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    ports:
+      - "19092:19092"
+
+  kafka2:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka2
+    environment:
+      KAFKA_PROCESS_ROLES: controller,broker
+      KAFKA_NODE_ID: 2
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:9093,2@kafka2:9093,3@kafka3:9093"
+      KAFKA_LISTENERS: PLAINTEXT://kafka2:9092,EXTERNAL://0.0.0.0:19094,CONTROLLER://kafka2:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092,EXTERNAL://localhost:19094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CLUSTER_ID: "cluster-1"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    ports:
+      - "19094:19094"
+
+  kafka3:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka3
+    environment:
+      KAFKA_PROCESS_ROLES: controller,broker
+      KAFKA_NODE_ID: 3
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:9093,2@kafka2:9093,3@kafka3:9093"
+      KAFKA_LISTENERS: PLAINTEXT://kafka3:9092,EXTERNAL://0.0.0.0:19096,CONTROLLER://kafka3:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092,EXTERNAL://localhost:19096
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CLUSTER_ID: "cluster-1"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+    ports:
+      - "19096:19096"
+
+  akhq:
+    image: tchiotludo/akhq:latest
+    container_name: akhq
+    ports:
+      - "8080:8080"
+    environment:
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            kraft-cluster:
+              properties:
+                bootstrap.servers: "kafka1:9092,kafka2:9092,kafka3:9092"
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+
+networks:
+  default:
+    name: kafka-network

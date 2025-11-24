@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: demo
+  kafka:
+    bootstrap-servers: localhost:19092,localhost:19094,localhost:19096
+    streams:
+      application-id: polizas-streams-app
+      properties:
+        default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+        default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+    consumer:
+      group-id: webflux-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+    properties:
+      security.protocol: PLAINTEXT
+server:
+  port: ${PORT:8081}
+
+kafka:
+  topics:
+    data-topic: polizas-test
