@@ -32,8 +32,6 @@ public class PolizaStreamConfig {
 
     /** Aplica el evento al estado actual */
     private String aplicarEvento(String estadoAnterior, String evento) {
-        // Aquí pones tu lógica:
-        // Combinar JSON, actualizar valores, etc.
         return evento; // ejemplo simple
     }
 }

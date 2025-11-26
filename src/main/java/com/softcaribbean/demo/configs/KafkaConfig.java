@@ -1,4 +1,4 @@
-package com.softcaribbean.demo.infrastructure.kafka;
+package com.softcaribbean.demo.configs;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -22,8 +22,17 @@ import java.util.Map;
 public class KafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
-    private List<String> bootstrapServers;
+    private String bootstrapServers;
 
+    @Bean
+    public ReactiveKafkaProducerTemplate<String, String> reactiveKafkaProducerTemplate() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, String.join(",", bootstrapServers));
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        SenderOptions<String, String> senderOptions = SenderOptions.create(props);
+        return new ReactiveKafkaProducerTemplate<>(senderOptions);
+    }
 
     @Bean
     public KafkaAdmin kafkaAdmin() {
@@ -60,6 +69,5 @@ public class KafkaConfig {
 
         return ReceiverOptions.create(config);
     }
-
-
 }
+
