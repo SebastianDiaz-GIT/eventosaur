@@ -1,0 +1,84 @@
+{
+	"info": {
+		"_postman_id": "53cdaf81-5566-4222-84b6-7c303ec841d5",
+		"name": "demo-kafka-cluster",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42469043"
+	},
+	"item": [
+		{
+			"name": "CrearEvento",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idPoliza\": \"Poliza123-Test\",\r\n    \"extraData\": \"Hola 2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/kafka-consumer/create-event",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"kafka-consumer",
+						"create-event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BuscarEstadoPorID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/kafka-consumer/status-poliza/POLIZA-4ca96d3d-6b56-41c9-beaa-5fdb237abc73",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"kafka-consumer",
+						"status-poliza",
+						"POLIZA-4ca96d3d-6b56-41c9-beaa-5fdb237abc73"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generacion masiva de eventos Kafka",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/api/kafka-consumer/generar/10000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"kafka-consumer",
+						"generar",
+						"10000"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
